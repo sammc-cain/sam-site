@@ -1,39 +1,153 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Small Observations</title> <link rel="stylesheet" href="style.css"> </head>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small Observations</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
 
 <header class="site-header">
+    <div class="site-brand">
+        <a href="index.html" class="site-title">SMALL OBSERVATIONS</a>
+        <div class="site-tagline">
+            Notes, stories and things worth remembering
+        </div>
+    </div>
 
-<div class="site-brand"> <div class="site-title">SMALL OBSERVATIONS</div> <div class="site-tagline">Notes, stories and things worth remembering</div> </div>
+    <button
+            id="menu-button"
+            class="menu-button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="menu"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
 
-<button id="menu-button" class="menu-button" aria-label="Open menu"> <span></span> <span></span> <span></span> </button>
+    <nav id="menu" class="menu" aria-label="Main navigation">
+        <div class="menu-item">
+            <button
+                    class="menu-category"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="submenu-search"
+            >
+                <span>Search</span>
+                <span class="submenu-arrow" aria-hidden="true">›</span>
+            </button>
 
-<nav id="menu" class="menu"> <a href="https://www.wikipedia.org" target="blank">Wikipedia</a> <a href="https://www.bbc.co.uk" target="blank">BBC</a> </nav>
+            <div id="submenu-search" class="submenu">
+                <a
+                        href="https://www.google.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                >Google</a>
+                <a
+                        href="https://duckduckgo.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                >DuckDuckGo</a>
+            </div>
+        </div>
 
+        <div class="menu-item">
+            <button
+                    class="menu-category"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="submenu-news"
+            >
+                <span>News</span>
+                <span class="submenu-arrow" aria-hidden="true">›</span>
+            </button>
+
+            <div id="submenu-news" class="submenu">
+                <a
+                        href="https://www.bbc.com/news"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                >BBC News</a>
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <button
+                    class="menu-category"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="submenu-sports"
+            >
+                <span>Sports</span>
+                <span class="submenu-arrow" aria-hidden="true">›</span>
+            </button>
+
+            <div id="submenu-sports" class="submenu">
+                <a
+                        href="https://www.espncricinfo.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                >ESPNcricinfo</a>
+                <a
+                        href="https://www.skysports.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                >Sky Sports</a>
+            </div>
+        </div>
+    </nav>
 </header>
 
 <main class="content">
+    <section class="latest-post">
+        <h2>Latest Post</h2>
 
-<section class="latest-post">
+        <div id="blog-preview" aria-live="polite">
+            <p class="preview-status" role="status">
+                Loading latest post...
+            </p>
+        </div>
+    </section>
 
-<h2>Latest Post</h2>
+    <section class="external-post">
+        <h2>From Elsewhere</h2>
 
-<div id="blog-preview"> Loading latest post... </div>
+        <div id="external-preview" aria-live="polite">
+            <p class="preview-status" role="status">
+                Loading external article...
+            </p>
+        </div>
+    </section>
 
-</section>
+    <section class="about">
+        <h2>About Me</h2>
 
-<section class="about">
+        <p>
+            Hello, and welcome to my little corner of the internet.
+            This is where I collect thoughts, discoveries, stories
+            and whatever else happens to catch my attention.
+        </p>
 
-<h2>About Me</h2>
-
-<p> Hello, and welcome to my little corner of the internet. This is where I collect thoughts, discoveries, stories and whatever else happens to catch my attention. </p>
-
-<p> Thanks for stopping by. I hope you find something here that interests you. </p>
-
-</section>
-
+        <p>
+            Thanks for stopping by. I hope you find something here
+            that interests you.
+        </p>
+    </section>
 </main>
 
+<footer class="site-footer">
+    <p>&copy; <span class="current-year">2026</span> Small Observations</p>
+</footer>
+
+<script>
+    document.querySelectorAll(".current-year").forEach(function (element) {
+        element.textContent = new Date().getFullYear();
+    });
+</script>
 <script src="script.js"></script>
 
-</body> </html>
+</body>
+</html>

@@ -1,189 +1,536 @@
-{
-  box-sizing: border-box;
+/* ========================================
+   1. Locally hosted fonts
+   ======================================== */
+
+@font-face {
+    font-family: "Comfortaa";
+    src: url("fonts/Comfortaa[wght].ttf") format("truetype");
+    font-style: normal;
+    font-weight: 300 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Fraunces";
+    src: url("fonts/Fraunces[SOFT,WONK,opsz,wght].ttf") format("truetype");
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Fraunces";
+    src: url("fonts/Fraunces-Italic[SOFT,WONK,opsz,wght].ttf") format("truetype");
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "DM Sans";
+    src: url("fonts/DMSans[opsz,wght].ttf") format("truetype");
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "DM Sans";
+    src: url("fonts/DMSans-Italic[opsz,wght].ttf") format("truetype");
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Lora";
+    src: url("fonts/Lora[wght].ttf") format("truetype");
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Lora";
+    src: url("fonts/Lora-Italic[wght].ttf") format("truetype");
+    font-style: italic;
+    font-weight: 400 700;
+    font-display: swap;
+}
+
+
+/* ========================================
+   2. Base styles
+   ======================================== */
+
+* {
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  background: #FFFDE7;
-  color: #222222;
-  font-family: Georgia, "Times New Roman", serif;
-  line-height: 1.7;
+    margin: 0;
+    background: #FFFDEB;
+    color: #222222;
+    font-family: "Lora", Georgia, "Times New Roman", serif;
+    line-height: 1.75;
 }
 
+
+/* ========================================
+   3. Site header and branding
+   ======================================== */
+
 .site-header {
-  position: relative;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 45px 25px 35px;
-  border-bottom: 1px solid #dddddd;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 45px 30px 35px;
+    border-bottom: 1px solid #dddddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .site-title {
-  font-size: 30px;
-  letter-spacing: 2px;
-  font-weight: normal;
+    color: inherit;
+    text-decoration: none;
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 30px;
+    letter-spacing: 2px;
+    font-weight: 500;
+    line-height: 1.3;
 }
 
 .site-tagline {
-  margin-top: 4px;
-  color: #777777;
-  font-size: 15px;
-  font-style: italic;
+    margin-top: 6px;
+    color: #777777;
+    font-family: "Comfortaa", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 1.6;
 }
 
+
+/* ========================================
+   4. Hamburger button
+   ======================================== */
+
 .menu-button {
-  width: 28px;
-  height: 28px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  padding: 4px 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 4px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .menu-button span {
-  display: block;
-  width: 100%;
-  height: 2px;
-  background: #222222;
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #222222;
 }
 
+
+/* ========================================
+   5. Main navigation menu
+   ======================================== */
+
 .menu {
-  display: none;
-  position: absolute;
-  right: 25px;
-  top: 100px;
-  width: 190px;
-  background: #ffffff;
-  border: 1px solid #dddddd;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  z-index: 10;
+    display: none;
+    position: absolute;
+    top: calc(100% - 1px);
+    right: 25px;
+    width: 200px;
+    background: #fffdeb;
+    border: 1px solid #dddddd;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    z-index: 10;
+    font-family: "DM Sans", Arial, sans-serif;
 }
 
 .menu.open {
-  display: block;
+    display: block;
 }
 
-.menu a {
-  display: block;
-  padding: 13px 16px;
-  color: #333333;
-  text-decoration: none;
+.menu-item {
+    position: relative;
 }
 
-.menu a:hover {
-  background: #f5f5f5;
+.menu-item + .menu-item {
+    border-top: 1px solid rgba(221, 221, 221, 0.65);
 }
+
+.menu-category {
+    width: 100%;
+    min-height: 46px;
+    border: none;
+    background: transparent;
+    padding: 12px 15px 12px 16px;
+    color: #333333;
+    font: inherit;
+    font-size: 15px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.submenu-arrow {
+    font-size: 23px;
+    line-height: 1;
+    transition: transform 0.15s ease;
+}
+
+.menu-item.submenu-open > .menu-category .submenu-arrow {
+    transform: rotate(90deg);
+}
+
+.menu-category:hover,
+.menu-item:focus-within > .menu-category {
+    background: #ffffdb;
+}
+
+
+/* ========================================
+   6. Submenus
+   ======================================== */
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: -1px;
+    left: 100%;
+    width: 190px;
+    background: #fffdeb;
+    border: 1px solid #dddddd;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    z-index: 11;
+}
+
+.menu-item.submenu-open > .submenu {
+    display: block;
+}
+
+@media (min-width: 601px) {
+    .menu-item:hover > .submenu,
+    .menu-item:focus-within > .submenu {
+        display: block;
+    }
+
+    .menu-item:hover > .menu-category {
+        background: #ffffdb;
+    }
+}
+
+.submenu a {
+    display: block;
+    padding: 12px 16px;
+    color: #333333;
+    font-size: 14px;
+    line-height: 1.5;
+    text-decoration: none;
+}
+
+.submenu a:hover {
+    background: #ffffdb;
+}
+
+.submenu a + a {
+    border-top: 1px solid rgba(221, 221, 221, 0.65);
+}
+
+
+/* ========================================
+   7. Keyboard focus
+   ======================================== */
+
+.menu-button:focus-visible,
+.menu-category:focus-visible,
+.menu a:focus-visible,
+.read-more:focus-visible,
+.site-title:focus-visible {
+    outline: 2px solid #555555;
+    outline-offset: -2px;
+}
+
+.menu-button:focus-visible,
+.read-more:focus-visible,
+.site-title:focus-visible {
+    outline-offset: 4px;
+}
+
+
+/* ========================================
+   8. Main content layout
+   ======================================== */
 
 .content {
-  max-width: 760px;
-  margin: 55px auto;
-  padding: 0 25px;
+    max-width: 760px;
+    margin: 55px auto;
+    padding: 0 25px;
 }
 
-.latest-post {
-  margin-bottom: 70px;
+
+/* ========================================
+   9. Homepage post previews
+   ======================================== */
+
+.latest-post,
+.external-post {
+    margin-bottom: 75px;
 }
 
 .latest-post h2,
+.external-post h2,
 .about h2 {
-  font-size: 13px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #888888;
-  font-weight: normal;
-  margin-bottom: 25px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888888;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0 0 28px;
 }
 
-#blog-preview h3 {
-  font-size: 32px;
-  line-height: 1.25;
-  font-weight: normal;
-  margin: 0 0 5px;
+#blog-preview h3,
+#external-preview h3 {
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 28px;
+    line-height: 1.3;
+    font-weight: 400;
+    margin: 0 0 8px;
 }
 
-.post-date {
-  color: #888888;
-  font-size: 14px;
-  margin-bottom: 22px;
+.post-date,
+.external-date {
+    color: #888888;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 24px;
 }
 
-.post-excerpt {
-  font-size: 17px;
-  line-height: 1.8;
+.post-excerpt,
+.external-excerpt {
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.85;
+    font-weight: 400;
+    margin: 0;
 }
 
 .read-more {
-  margin-left: 8px;
-  color: #222222;
-  font-weight: bold;
-  text-decoration: none;
-  white-space: nowrap;
+    display: inline-block;
+    margin-top: 12px;
+    color: #222222;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
 }
 
 .read-more:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
+.preview-status {
+    margin: 0;
+    color: #777777;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 15px;
+    font-style: italic;
+}
+
+
+/* ========================================
+   10. About section
+   ======================================== */
+
 .about {
-  padding-top: 40px;
-  border-top: 1px solid #dddddd;
+    padding-top: 40px;
+    border-top: 1px solid #dddddd;
+}
+
+.about h2 {
+    margin-bottom: 22px;
 }
 
 .about p {
-  font-size: 17px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.85;
+    margin: 0 0 24px;
 }
 
+
+/* ========================================
+   11. Individual blog article
+   ======================================== */
+
 #blog-post h1 {
-  font-size: 38px;
-  line-height: 1.25;
-  font-weight: normal;
-  margin-bottom: 5px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 38px;
+    line-height: 1.3;
+    font-weight: 400;
+    margin: 0 0 8px;
 }
 
 #post-date {
-  color: #888888;
-  font-size: 14px;
-  margin-bottom: 35px;
+    color: #888888;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 38px;
 }
 
-#post-content {
-  font-size: 17px;
-  line-height: 1.8;
+/* Match the softer DM Sans font used by the homepage excerpt. */
+#post-content,
+#post-content p {
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.9;
 }
 
 #post-content p {
-  margin-bottom: 25px;
+    margin: 0 0 28px;
 }
 
-@media (max-width: 600px) {
-  .site-header {
-    padding: 30px 20px;
-  }
 
-  .site-title {
-    font-size: 23px;
-  }
+/* ========================================
+   12. Site footer
+   ======================================== */
 
-  .site-tagline {
+.site-footer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 25px 30px;
+    border-top: 1px solid #dddddd;
+    text-align: center;
+}
+
+.site-footer p {
+    margin: 0;
+    color: #888888;
+    font-family: "DM Sans", Arial, sans-serif;
     font-size: 13px;
-  }
+    line-height: 1.6;
+}
 
-  .content {
-    margin-top: 40px;
-    padding: 0 20px;
-  }
 
-  #blog-preview h3 {
-    font-size: 27px;
-  }
+/* ========================================
+   13. Mobile layout
+   ======================================== */
 
-  #blog-post h1 {
-    font-size: 30px;
-  }
+@media (max-width: 600px) {
+    .site-header {
+        padding: 30px 20px;
+        gap: 18px;
+    }
+
+    .site-title {
+        font-size: 23px;
+        letter-spacing: 1.5px;
+    }
+
+    .site-tagline {
+        font-size: 12px;
+    }
+
+    .menu {
+        top: calc(100% - 1px);
+        right: 20px;
+        width: 220px;
+        max-width: calc(100vw - 40px);
+    }
+
+    .menu-category {
+        min-height: 48px;
+    }
+
+    .submenu {
+        position: static;
+        width: 100%;
+        border: none;
+        border-top: 1px solid rgba(221, 221, 221, 0.65);
+        box-shadow: none;
+        background: #fffdeb;
+    }
+
+    .submenu a {
+        padding: 12px 16px 12px 28px;
+    }
+
+    .content {
+        margin-top: 40px;
+        margin-bottom: 40px;
+        padding: 0 20px;
+    }
+
+    .latest-post,
+    .external-post {
+        margin-bottom: 60px;
+    }
+
+    #blog-preview h3,
+    #external-preview h3 {
+        font-size: 25px;
+        line-height: 1.35;
+    }
+
+    .post-excerpt,
+    .external-excerpt,
+    .about p {
+        font-size: 16px;
+        line-height: 1.85;
+    }
+
+    .read-more {
+        margin-top: 10px;
+        font-size: 15px;
+    }
+
+    #blog-post h1 {
+        font-size: 30px;
+        line-height: 1.35;
+    }
+
+    #post-date {
+        margin-bottom: 30px;
+    }
+
+    #post-content,
+    #post-content p {
+        font-size: 16px;
+        line-height: 1.85;
+    }
+
+    #post-content p {
+        margin-bottom: 24px;
+    }
+
+    .site-footer {
+        padding: 22px 20px 26px;
+    }
+}
+
+
+/* ========================================
+   14. Reduced motion
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .submenu-arrow {
+        transition: none;
+    }
 }
