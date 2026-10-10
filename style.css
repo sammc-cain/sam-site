@@ -69,7 +69,13 @@
 
 body {
     margin: 0;
-    background: #FFFDEB;
+    background: radial-gradient(
+            ellipse at top left,
+            #DCEBEA 0%,
+            #BBD8D8 52%,
+            #8FBDBF 100%
+    );
+    background-attachment: fixed;
     color: #222222;
     font-family: "Lora", Georgia, "Times New Roman", serif;
     line-height: 1.75;
@@ -91,29 +97,59 @@ body {
     align-items: center;
 }
 
+.site-brand {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-width: 0;
+}
+
+.site-logo-link {
+    display: block;
+    flex: 0 0 96px;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.site-logo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.site-brand-text {
+    min-width: 0;
+}
+
 .site-title {
+    display: inline-block;
     color: inherit;
     text-decoration: none;
     font-family: "Fraunces", Georgia, serif;
-    font-size: 30px;
-    letter-spacing: 2px;
+    font-size: 33px;
+    letter-spacing: 1.5px;
     font-weight: 500;
     line-height: 1.3;
 }
 
 .site-tagline {
-    margin-top: 6px;
+    margin-top: 5px;
     color: #777777;
-    font-family: "Comfortaa", sans-serif;
-    font-size: 14px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 13px;
     font-weight: 400;
-    font-style: normal;
+    font-style: italic;
+    letter-spacing: 0.1px;
     line-height: 1.6;
 }
 
 
 /* ========================================
-   4. Hamburger button
+   4. Two-line menu button
    ======================================== */
 
 .menu-button {
@@ -126,14 +162,20 @@ body {
     padding: 4px 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 7px;
 }
 
 .menu-button span {
     display: block;
-    width: 100%;
+    width: 26px;
     height: 2px;
     background: #222222;
+}
+
+.menu-button span:nth-child(2) {
+    width: 18px;
 }
 
 
@@ -147,7 +189,7 @@ body {
     top: calc(100% - 1px);
     right: 25px;
     width: 200px;
-    background: #fffdeb;
+    background: #DCEBEA;
     border: 1px solid #dddddd;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     z-index: 10;
@@ -195,7 +237,7 @@ body {
 
 .menu-category:hover,
 .menu-item:focus-within > .menu-category {
-    background: #ffffdb;
+    background: #BBD8D8;
 }
 
 
@@ -209,7 +251,7 @@ body {
     top: -1px;
     left: 100%;
     width: 190px;
-    background: #fffdeb;
+    background: #DCEBEA;
     border: 1px solid #dddddd;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     z-index: 11;
@@ -226,7 +268,7 @@ body {
     }
 
     .menu-item:hover > .menu-category {
-        background: #ffffdb;
+        background: #BBD8D8;
     }
 }
 
@@ -240,7 +282,7 @@ body {
 }
 
 .submenu a:hover {
-    background: #ffffdb;
+    background: #BBD8D8;
 }
 
 .submenu a + a {
@@ -256,14 +298,16 @@ body {
 .menu-category:focus-visible,
 .menu a:focus-visible,
 .read-more:focus-visible,
-.site-title:focus-visible {
+.site-title:focus-visible,
+.site-logo-link:focus-visible {
     outline: 2px solid #555555;
     outline-offset: -2px;
 }
 
 .menu-button:focus-visible,
 .read-more:focus-visible,
-.site-title:focus-visible {
+.site-title:focus-visible,
+.site-logo-link:focus-visible {
     outline-offset: 4px;
 }
 
@@ -273,9 +317,15 @@ body {
    ======================================== */
 
 .content {
-    max-width: 760px;
-    margin: 55px auto;
+    max-width: 1200px;
+    margin: 45px auto;
     padding: 0 25px;
+}
+
+.content > section {
+    max-width: 710px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 
@@ -285,20 +335,37 @@ body {
 
 .latest-post,
 .external-post {
-    margin-bottom: 75px;
+    margin-bottom: 60px;
 }
 
 .latest-post h2,
 .external-post h2,
 .about h2 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
     font-family: "DM Sans", Arial, sans-serif;
     font-size: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #888888;
-    font-weight: 400;
+    letter-spacing: 1.2px;
+    text-transform: lowercase;
+    color: #666666;
+    font-weight: 500;
     line-height: 1.5;
     margin: 0 0 28px;
+}
+
+/* Subtle editorial marks around homepage section labels */
+.latest-post h2::before,
+.latest-post h2::after,
+.external-post h2::before,
+.external-post h2::after,
+.about h2::before,
+.about h2::after {
+    content: "✦";
+    color: #99917a;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0;
 }
 
 #blog-preview h3,
@@ -314,7 +381,7 @@ body {
 .external-date {
     color: #888888;
     font-family: "DM Sans", Arial, sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.5;
     margin-bottom: 24px;
 }
@@ -356,12 +423,57 @@ body {
    ======================================== */
 
 .about {
-    padding-top: 40px;
+    position: relative;
+    padding-top: 30px;
+    border-top: none;
+}
+
+/* Divider 2: centred, same width as Divider 3 */
+.about::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: min(760px, calc(100vw - 50px));
     border-top: 1px solid #dddddd;
+    transform: translateX(-50%);
 }
 
 .about h2 {
     margin-bottom: 22px;
+}
+
+.about-content {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.about-image {
+    display: block;
+    flex: 0 0 160px;
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.about-text {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    padding-left: 30px;
+}
+
+/* Desktop-only divider between the About Me image and text */
+.about-text::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 0;
+    width: 1px;
+    background: #dddddd;
 }
 
 .about p {
@@ -370,6 +482,10 @@ body {
     font-weight: 400;
     line-height: 1.85;
     margin: 0 0 24px;
+}
+
+.about p:last-child {
+    margin-bottom: 0;
 }
 
 
@@ -393,7 +509,6 @@ body {
     margin-bottom: 38px;
 }
 
-/* Match the softer DM Sans font used by the homepage excerpt. */
 #post-content,
 #post-content p {
     font-family: "DM Sans", Arial, sans-serif;
@@ -412,19 +527,125 @@ body {
    ======================================== */
 
 .site-footer {
+    position: relative;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 24px 25px 30px;
-    border-top: 1px solid #dddddd;
-    text-align: center;
+    padding: 30px 25px 20px;
+    border-top: none;
 }
 
-.site-footer p {
-    margin: 0;
+/* Divider 3: centred and the same length as Divider 2 */
+.site-footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: min(760px, calc(100vw - 50px));
+    border-top: 1px solid #dddddd;
+    transform: translateX(-50%);
+}
+
+/* Footer content sits inside the divider with side padding */
+.footer-content {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+.footer-contact h2,
+.footer-social h2 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 14px;
+    color: #777777;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    line-height: 1.5;
+    text-transform: lowercase;
+}
+
+/* Match the decorative marks used by the other section labels */
+.footer-contact h2::before,
+.footer-contact h2::after,
+.footer-social h2::before,
+.footer-social h2::after {
+    content: "✦";
+    color: #99917a;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    color: #555555;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.contact-icon {
+    display: block;
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.social-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    color: #444444;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.social-links svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+}
+
+.social-links a:hover {
+    color: #888888;
+    transform: translateY(-2px);
+}
+
+.social-links a:focus-visible {
+    outline: 2px solid #555555;
+    outline-offset: 3px;
+}
+
+/* Copyright is centred, with no divider above it */
+.copyright {
+    margin: 16px 0 0;
+    padding: 0;
+    border-top: none;
     color: #888888;
     font-family: "DM Sans", Arial, sans-serif;
     font-size: 13px;
     line-height: 1.6;
+    text-align: center;
 }
 
 
@@ -438,9 +659,19 @@ body {
         gap: 18px;
     }
 
+    .site-brand {
+        gap: 12px;
+    }
+
+    .site-logo-link {
+        flex-basis: 64px;
+        width: 64px;
+        height: 64px;
+    }
+
     .site-title {
-        font-size: 23px;
-        letter-spacing: 1.5px;
+        font-size: 24px;
+        letter-spacing: 1.2px;
     }
 
     .site-tagline {
@@ -464,7 +695,7 @@ body {
         border: none;
         border-top: 1px solid rgba(221, 221, 221, 0.65);
         box-shadow: none;
-        background: #fffdeb;
+        background: #DCEBEA;
     }
 
     .submenu a {
@@ -472,14 +703,14 @@ body {
     }
 
     .content {
-        margin-top: 40px;
-        margin-bottom: 40px;
+        margin-top: 35px;
+        margin-bottom: 30px;
         padding: 0 20px;
     }
 
     .latest-post,
     .external-post {
-        margin-bottom: 60px;
+        margin-bottom: 45px;
     }
 
     #blog-preview h3,
@@ -498,6 +729,32 @@ body {
     .read-more {
         margin-top: 10px;
         font-size: 15px;
+    }
+
+    .about {
+        padding-top: 25px;
+    }
+
+    .about-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .about-image {
+        flex-basis: 140px;
+        width: 140px;
+        height: 140px;
+    }
+
+    .about-text {
+        width: 100%;
+        padding-left: 0;
+    }
+
+    /* No vertical divider on mobile */
+    .about-text::before {
+        display: none;
     }
 
     #blog-post h1 {
@@ -520,7 +777,30 @@ body {
     }
 
     .site-footer {
-        padding: 22px 20px 26px;
+        padding: 25px 20px 18px;
+    }
+
+    .site-footer::before {
+        width: calc(100vw - 40px);
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 0 12px;
+    }
+
+    .footer-contact h2,
+    .footer-social h2 {
+        margin-bottom: 10px;
+    }
+
+    .social-links {
+        gap: 18px;
+    }
+
+    .copyright {
+        margin-top: 12px;
     }
 }
 
@@ -530,7 +810,8 @@ body {
    ======================================== */
 
 @media (prefers-reduced-motion: reduce) {
-    .submenu-arrow {
+    .submenu-arrow,
+    .social-links a {
         transition: none;
     }
 }

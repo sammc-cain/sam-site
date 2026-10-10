@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+(function () {
     // ========================================
     // 1. Shared helpers
     // ========================================
@@ -69,6 +69,53 @@ document.addEventListener("DOMContentLoaded", function () {
         container.replaceChildren(status);
     }
 
+    function readCache(key) {
+        try {
+            var cachedValue = localStorage.getItem(key);
+
+            if (!cachedValue) {
+                return null;
+            }
+
+            var data = JSON.parse(cachedValue);
+
+            if (
+                !data ||
+                typeof data.title !== "string" ||
+                typeof data.date !== "string" ||
+                typeof data.link !== "string" ||
+                typeof data.fullText !== "string" ||
+                !data.title ||
+                !data.date ||
+                !data.link ||
+                !data.fullText
+            ) {
+                return null;
+            }
+
+            return data;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function writeCache(key, data) {
+        try {
+            localStorage.setItem(key, JSON.stringify(data));
+        } catch (error) {
+            // The preview still works if browser storage is unavailable.
+        }
+    }
+
+    function sameArticle(first, second) {
+        return (
+            first.title === second.title &&
+            first.date === second.date &&
+            first.link === second.link &&
+            first.fullText === second.fullText
+        );
+    }
+
 
     // ========================================
     // 2. Hamburger menu and submenus
@@ -123,7 +170,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        // Open and close the main menu.
         menuButton.addEventListener("click", function (event) {
             event.stopPropagation();
 
@@ -134,7 +180,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        // Expand a category when clicked or tapped.
         categoryButtons.forEach(function (button) {
             button.addEventListener("click", function (event) {
                 event.stopPropagation();
@@ -142,14 +187,12 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
-        // Close the menu when a link is selected.
         menu.addEventListener("click", function (event) {
             if (event.target.closest("a")) {
                 closeMenu();
             }
         });
 
-        // Close the menu when clicking outside it.
         document.addEventListener("click", function (event) {
             if (
                 !menu.contains(event.target) &&
@@ -159,7 +202,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        // Escape closes the menu and restores focus to the hamburger.
         document.addEventListener("keydown", function (event) {
             if (event.key !== "Escape" || !menu.classList.contains("open")) {
                 return;
@@ -172,17 +214,71 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ========================================
-    // 3. External article preview
+    // 3. Latest post from WordPress
     // ========================================
 
-    var externalPreview = document.getElementById("external-preview");
+    var latestPreview = document.getElementById("external-preview");
+    var latestCacheKey = "small-observations-external-article-v1";
 
-    if (externalPreview) {
+    function renderLatestArticle(article) {
+        var excerptData = createExcerpt(article.fullText);
+
+        var titleElement = document.createElement("h3");
+        titleElement.textContent = article.title;
+
+        var publishedDate = new Date(article.date);
+
+        if (Number.isNaN(publishedDate.getTime())) {
+            throw new Error("The article publication date is invalid.");
+        }
+
+        var dateElement = document.createElement("div");
+        dateElement.className = "external-date";
+        dateElement.textContent = publishedDate.toLocaleDateString(
+            "en-GB",
+            {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+                timeZone: "UTC"
+            }
+        );
+
+        var excerptElement = document.createElement("p");
+        excerptElement.className = "external-excerpt";
+        excerptElement.textContent =
+            excerptData.text +
+            (excerptData.truncated ? "..." : "");
+
+        var readMore = createReadMoreLink(article.link, true);
+
+        latestPreview.replaceChildren(
+            titleElement,
+            dateElement,
+            excerptElement,
+            readMore
+        );
+    }
+
+    if (latestPreview) {
+        var cachedArticle = readCache(latestCacheKey);
+
+        // Show the previously loaded article immediately, if available.
+        if (cachedArticle) {
+            try {
+                renderLatestArticle(cachedArticle);
+            } catch (error) {
+                console.error("Cached latest article error:", error);
+                cachedArticle = null;
+            }
+        }
+
         var apiUrl =
             "https://kuntalganguly.com/wp-json/wp/v2/posts" +
             "?slug=ma-langue-sourit&_fields=date,link,title,content";
 
-        fetch(apiUrl, {cache: "no-store"})
+        // Refresh the article in the background.
+        fetch(apiUrl)
             .then(function (response) {
                 if (!response.ok) {
                     throw new Error(
@@ -211,165 +307,53 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 var parser = new DOMParser();
+
                 var titleDocument = parser.parseFromString(
                     post.title.rendered,
                     "text/html"
                 );
+
                 var contentDocument = parser.parseFromString(
                     post.content.rendered,
                     "text/html"
                 );
 
-                var title = titleDocument.body.textContent.trim();
-                var fullText = contentDocument.body.textContent
-                    .replace(/\s+/g, " ")
-                    .trim();
+                var article = {
+                    title: titleDocument.body.textContent.trim(),
+                    date: post.date,
+                    link: post.link,
+                    fullText: contentDocument.body.textContent
+                        .replace(/\s+/g, " ")
+                        .trim()
+                };
 
-                if (!title || !fullText) {
+                if (!article.title || !article.fullText) {
                     throw new Error(
                         "The article contains no readable text."
                     );
                 }
 
-                var excerptData = createExcerpt(fullText);
+                // Save the article for the next visit.
+                writeCache(latestCacheKey, article);
 
-                // Article title
-                var titleElement = document.createElement("h3");
-                titleElement.textContent = title;
-
-                // Publication date
-                var publishedDate = new Date(post.date);
-
-                if (Number.isNaN(publishedDate.getTime())) {
-                    throw new Error(
-                        "The article publication date is invalid."
-                    );
+                // Redraw only if the article has changed.
+                if (
+                    !cachedArticle ||
+                    !sameArticle(cachedArticle, article)
+                ) {
+                    renderLatestArticle(article);
                 }
-
-                var dateElement = document.createElement("div");
-                dateElement.className = "external-date";
-                dateElement.textContent = publishedDate.toLocaleDateString(
-                    "en-GB",
-                    {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                        timeZone: "UTC"
-                    }
-                );
-
-                // Article excerpt
-                var excerptElement = document.createElement("p");
-                excerptElement.className = "external-excerpt";
-                excerptElement.textContent =
-                    excerptData.text +
-                    (excerptData.truncated ? "..." : "");
-
-                // Read more link
-                var readMore = createReadMoreLink(post.link, true);
-
-                // Display the preview
-                externalPreview.replaceChildren(
-                    titleElement,
-                    dateElement,
-                    excerptElement,
-                    readMore
-                );
             })
             .catch(function (error) {
-                console.error("External article error:", error);
+                console.error("Latest article error:", error);
 
-                showStatus(
-                    externalPreview,
-                    "Unable to load the external article."
-                );
+                // Keep cached content visible if the refresh fails.
+                if (!cachedArticle) {
+                    showStatus(
+                        latestPreview,
+                        "Unable to load the latest post."
+                    );
+                }
             });
     }
-
-
-    // ========================================
-    // 4. Latest post preview
-    // ========================================
-
-    var blogPreview = document.getElementById("blog-preview");
-
-    if (!blogPreview) {
-        return;
-    }
-
-    fetch("blog.html")
-        .then(function (response) {
-            if (!response.ok) {
-                throw new Error(
-                    "Unable to retrieve blog.html. Status: " + response.status
-                );
-            }
-
-            return response.text();
-        })
-        .then(function (html) {
-            var parser = new DOMParser();
-            var blogDocument = parser.parseFromString(html, "text/html");
-
-            var titleElement = blogDocument.querySelector("#post-title");
-            var dateElement = blogDocument.querySelector("#post-date");
-            var contentElement = blogDocument.querySelector("#post-content");
-
-            if (!titleElement || !contentElement) {
-                throw new Error("The latest post content is incomplete.");
-            }
-
-            var title = titleElement.textContent.trim();
-            var date = dateElement ? dateElement.textContent.trim() : "";
-            var fullText = contentElement.textContent
-                .replace(/\s+/g, " ")
-                .trim();
-
-            if (!title || !fullText) {
-                throw new Error("The latest post contains no readable text.");
-            }
-
-            var excerptData = createExcerpt(fullText);
-
-            // Article title
-            var titleOnPage = document.createElement("h3");
-            titleOnPage.textContent = title;
-
-            var previewElements = [titleOnPage];
-
-            // Publication date
-            if (date !== "") {
-                var dateOnPage = document.createElement("div");
-
-                dateOnPage.className = "post-date";
-                dateOnPage.textContent = date;
-
-                previewElements.push(dateOnPage);
-            }
-
-            // Article excerpt
-            var excerptElement = document.createElement("p");
-            excerptElement.className = "post-excerpt";
-            excerptElement.textContent =
-                excerptData.text +
-                (excerptData.truncated ? "..." : "");
-
-            // Read more link
-            var readMore = createReadMoreLink("blog.html", false);
-
-            // Display the preview
-            blogPreview.replaceChildren(
-                ...previewElements,
-                excerptElement,
-                readMore
-            );
-        })
-        .catch(function (error) {
-            console.error("Error loading blog:", error);
-
-            showStatus(
-                blogPreview,
-                "Unable to load the latest post."
-            );
-        });
-});
+})();
